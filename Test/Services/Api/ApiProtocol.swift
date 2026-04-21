@@ -4,7 +4,8 @@
 //
 //  Created by Дмитрий Помин on 15.04.2026.
 //
+import Combine
 
-protocol ApiServiceProtocol: AnyObject {
-    func getAwesomeData() -> AnyPublisher<[AwesomeData], FetchError>
+protocol ApiProtocol {
+    func get() -> AnyPublisher<[AwesomeData], FetchError>
 }
