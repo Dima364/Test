@@ -47,7 +47,7 @@ final class ViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        startTimer()
+        viewModel.startTimer()
         viewModel.isLoadingPublisher
             .sink { [weak self] isLoading in
                 isLoading ? self?.loading.startAnimating() : self?.loading.stopAnimating()
@@ -58,22 +58,7 @@ final class ViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        stopTimer()
-    }
-    
-    private func startTimer() {
-        guard timerCancellable == nil else { return }
-        
-        timerCancellable = Timer.publish(every: 1.0, on: .main, in: .common)
-            .autoconnect()
-            .sink { [weak self] _ in
-                self?.viewModel.loadData()
-            }
-    }
-    
-    private func stopTimer() {
-        timerCancellable?.cancel()
-        timerCancellable = nil
+        viewModel.stopTimer()
     }
     
     private func setupLayout() {

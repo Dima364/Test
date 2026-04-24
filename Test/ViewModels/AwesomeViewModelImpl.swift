@@ -18,12 +18,13 @@ final class AwesomeViewModelImpl: AwesomeViewModelProtocol, ObservableObject {
     
     private let apiService: ApiProtocol
     private var cancellables: Set<AnyCancellable> = []
+    private var timerCancellable: AnyCancellable?
     
     init(apiService: ApiProtocol) {
         self.apiService = apiService
     }
     
-    func loadData() {
+    private func loadData() {
         isLoading = true
         errorMessage = nil
         minDateItem = nil
@@ -51,5 +52,20 @@ final class AwesomeViewModelImpl: AwesomeViewModelProtocol, ObservableObject {
             return
         }
         minDateItem = awesomeSet.min(by: { $0.date < $1.date })
+    }
+    
+    func startTimer() {
+        stopTimer()
+        
+        timerCancellable = Timer.publish(every: 1.0, on: .main, in: .common)
+                            .autoconnect()
+            .sink { [weak self] _ in
+                self?.loadData()
+            }
+    }
+    
+    func stopTimer() {
+        timerCancellable?.cancel()
+        timerCancellable = nil
     }
 }
