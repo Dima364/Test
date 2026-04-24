@@ -12,7 +12,8 @@ import Foundation
 final class AwesomeViewModelImpl: AwesomeViewModelProtocol, ObservableObject {
     @Published var isLoading: Bool = false
     var isLoadingPublisher: AnyPublisher<Bool, Never> { $isLoading.eraseToAnyPublisher() }
-    var awesomeSet: Set<AwesomeData> = []
+    
+    let awesomeSetActor = AwesomeSetActor()
     var errorMessage: String?
     var minDateItem: AwesomeData?
     
@@ -40,18 +41,15 @@ final class AwesomeViewModelImpl: AwesomeViewModelProtocol, ObservableObject {
                     break
                 }
             } receiveValue: { [weak self] awesomeData in
-                awesomeData.forEach {
-                    self?.awesomeSet.insert($0)
+                Task {
+                    await self?.awesomeSetActor.insert(data: awesomeData)
                 }
             }.store(in: &cancellables)
     }
     
-    func minElement() {
-        guard awesomeSet.count > 0 else {
-            self.errorMessage = "Empty set"
-            return
-        }
-        minDateItem = awesomeSet.min(by: { $0.date < $1.date })
+    func minElement() async {
+        minDateItem = await awesomeSetActor.min()
+        print(minDateItem ?? "no data")
     }
     
     func startTimer() {

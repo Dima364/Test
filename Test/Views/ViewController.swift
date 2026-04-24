@@ -85,8 +85,9 @@ final class ViewController: UIViewController {
     
     @objc
     private func buttonTap() {
-        viewModel.minElement()
-        print(viewModel.minDateItem?.date ?? "no data")
+        Task {
+            await viewModel.minElement()
+        }
     }
 }
 

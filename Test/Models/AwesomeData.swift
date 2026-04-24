@@ -7,6 +7,7 @@
 
 import Foundation
 
+nonisolated
 struct AwesomeData: Hashable, Comparable, Codable {
     let awesomeField: Int
     let date: Date

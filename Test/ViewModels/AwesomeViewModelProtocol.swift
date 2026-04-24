@@ -11,7 +11,7 @@ protocol AwesomeViewModelProtocol: AnyObject {
     var isLoading: Bool { get }
     var isLoadingPublisher: AnyPublisher<Bool, Never> { get }
 
-    func minElement()
+    func minElement() async
     func startTimer()
     func stopTimer()
 }
