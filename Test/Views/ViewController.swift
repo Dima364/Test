@@ -12,7 +12,7 @@ final class ViewController: UIViewController {
 
     private let viewModel: AwesomeViewModelProtocol
     private var cancellables = Set<AnyCancellable>()
-    private var timerCancellable: AnyCancellable?
+    
     private let loading = UIActivityIndicatorView(style: .medium)
     private lazy var button: UIButton = {
         let button = UIButton(type: .system)
@@ -88,11 +88,5 @@ final class ViewController: UIViewController {
         viewModel.minElement()
         print(viewModel.minDateItem?.date ?? "no data")
     }
-    
-    @objc
-    private func loadData() {
-        viewModel.loadData()
-    }
-    
 }
 
